@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "routes": [
+    { "src": "/api/register", "dest": "/api/register.js" },
+    { "src": "/api/login", "dest": "/api/login.js" },
+    { "src": "/api/items", "dest": "/api/items.js" },
+    { "src": "/api/items/.*", "dest": "/api/items.js" }
+  ]
+}
