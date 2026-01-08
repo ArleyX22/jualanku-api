@@ -1,3 +1,8 @@
+// api/login.js
+const { query } = require('../lib/db'); // ✅ Tambahkan ini!
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
 module.exports = async (req, res) => {
   // ✅ Tambahkan CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -35,8 +40,7 @@ module.exports = async (req, res) => {
       user: { id: user.id, username: user.username, email: user.email }
     });
   } catch (err) {
-    console.error(err);
-    console.error('Login error:', err);
+    console.error('Login error:', err); // 👈 Logging tambahan
     res.status(500).json({ error: 'Server error' });
   }
 };
