@@ -7,7 +7,8 @@ function setCors(res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 }
 
-module.exports.get = async (req, res) => {
+// Define handlers as separate functions
+const getItems = async (req, res) => {
   setCors(res);
   if (req.method === 'OPTIONS') return res.status(200).end();
   try {
@@ -23,7 +24,7 @@ module.exports.get = async (req, res) => {
   }
 };
 
-module.exports.post = async (req, res) => {
+const postItem = async (req, res) => {
   setCors(res);
   if (req.method === 'OPTIONS') return res.status(200).end();
   try {
@@ -43,7 +44,7 @@ module.exports.post = async (req, res) => {
   }
 };
 
-module.exports.put = async (req, res) => {
+const putItem = async (req, res) => {
   setCors(res);
   if (req.method === 'OPTIONS') return res.status(200).end();
   try {
@@ -66,7 +67,7 @@ module.exports.put = async (req, res) => {
   }
 };
 
-module.exports.delete = async (req, res) => {
+const deleteItem = async (req, res) => {
   setCors(res);
   if (req.method === 'OPTIONS') return res.status(200).end();
   try {
@@ -85,6 +86,7 @@ module.exports.delete = async (req, res) => {
   }
 };
 
+// Root handler for Vercel
 module.exports = async (req, res) => {
   setCors(res);
   if (req.method === 'OPTIONS') return res.status(200).end();
@@ -102,10 +104,10 @@ module.exports = async (req, res) => {
   }
 
   switch (req.method) {
-    case 'GET': return module.exports.get(req, res);
-    case 'POST': return module.exports.post(req, res);
-    case 'PUT': return module.exports.put(req, res);
-    case 'DELETE': return module.exports.delete(req, res);
+    case 'GET': return getItems(req, res);
+    case 'POST': return postItem(req, res);
+    case 'PUT': return putItem(req, res);
+    case 'DELETE': return deleteItem(req, res);
     default: return res.status(405).json({ error: 'Method not allowed' });
   }
 };
