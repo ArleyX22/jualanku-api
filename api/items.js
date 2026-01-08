@@ -2,8 +2,21 @@
 const { query } = require('../lib/db');
 const auth = require('./auth');
 
+// Helper: Set CORS headers
+function setCorsHeaders(res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+}
+
 // GET /api/items → semua item milik user
 module.exports.get = async (req, res) => {
+  setCorsHeaders(res); // ✅ Tambahkan CORS di setiap handler
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   try {
     const result = await query(
       'SELECT * FROM items WHERE user_id = $1',
@@ -18,6 +31,12 @@ module.exports.get = async (req, res) => {
 
 // POST /api/items → tambah item
 module.exports.post = async (req, res) => {
+  setCorsHeaders(res); // ✅ Tambahkan CORS di setiap handler
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   try {
     const { name, qty } = req.body;
     if (!name || qty == null) {
@@ -38,6 +57,12 @@ module.exports.post = async (req, res) => {
 
 // PUT /api/items/:id → update item
 module.exports.put = async (req, res) => {
+  setCorsHeaders(res); // ✅ Tambahkan CORS di setiap handler
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   try {
     const { id } = req.query;
     const { name, qty } = req.body;
@@ -60,6 +85,12 @@ module.exports.put = async (req, res) => {
 
 // DELETE /api/items/:id
 module.exports.delete = async (req, res) => {
+  setCorsHeaders(res); // ✅ Tambahkan CORS di setiap handler
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   try {
     const { id } = req.query;
 
@@ -81,10 +112,7 @@ module.exports.delete = async (req, res) => {
 
 // Export sebagai Vercel handler
 module.exports = async (req, res) => {
-  // CORS + parsing
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  setCorsHeaders(res); // ✅ Tambahkan juga di root handler
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
